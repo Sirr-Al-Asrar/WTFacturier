@@ -1,0 +1,136 @@
+%
+%
+%   WTFacturier | Header
+%  ──────────────────────
+%   En tête du fichier tex.
+%   Celui contient principalement les extensions et fonctions necessaire à la compilation du document.
+%
+%
+%
+% EXTENSIONS :
+% ───────────────────
+\documentclass[french,11pt]{article}
+\usepackage[sfdefault,book]{FiraSans}\renewcommand*\oldstylenums[1]{{\firaoldstyle #1}}
+\usepackage[T1]{fontenc}
+\usepackage{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[official]{eurosym}
+\usepackage[a4paper]{geometry}
+\usepackage{units}
+\usepackage{graphicx}
+\usepackage{tabu}
+\usepackage{fancyhdr}
+\usepackage{fp}
+\usepackage{scrextend}
+\usepackage{xcolor}
+%
+%
+% VARIABLES GENERIQUES :
+% ───────────────────
+\def\TVA{20}	% Taux de la TVA
+\def\TotalHT{0}
+\def\TotalTVA{0}
+\def\noTVA{%
+    \textbf{Total HT} & & & \TotalHT\ \euro \cr {\small TVA non applicable, art 293 B du CGI}
+}
+%
+\makeatletter
+%
+% FONCTION : addto developpé
+% ───────────────────
+\newcommand*\eaddto[2]{ %
+   \edef\tmp{#2}%
+   \expandafter\addto
+   \expandafter#1%
+   \expandafter{\tmp}%
+}
+%
+% FONCTION : Afficher la liste des produits
+% ───────────────────
+\newcommand{\AfficheResultat}{%
+    \vspace{-0.5em}\\
+    \ListeProduits
+    \ListeRemises
+    \ListeReduction
+	\FPadd{\TotalTTC}{\TotalHT}{\TotalTVA}
+    \FPeval{\TotalTVA}{\TotalHT * \TVA / 100}
+	\FPround{\TotalHT}{\TotalHT}{2}
+	\FPround{\TotalTVA}{\TotalTVA}{2}
+	\FPround{\TotalTTC}{\TotalTTC}{2}
+	\global\let\TotalHT\TotalHT
+	\global\let\TotalTVA\TotalTVA
+	\global\let\TotalTTC\TotalTTC
+	\cr \hline
+    \ifthenelse{\equal{\black}{oui}}
+    {}
+    {\noTVA
+        \ifthenelse {\equal{\AfficherTVA}{oui}}
+        {Total HT			& & &	\TotalHT	\cr
+         TVA \TVA~\% 		& & &	\TotalTVA	\cr}
+        {}
+    }
+}
+%
+% FONCTION : Ajouter un produit à la liste des produits
+% ──────────────────────────────────────────────────────
+\def\Titres{}
+\def\TitresPremier{0}
+\newcommand{\AjouterProduit}[4]{                                % Arguments : Catégorie, Désignation, quantité, prix unitaire HT
+                            
+   \ifthenelse{\equal{#1}{}}                                        % Si un titre est fournit
+       {}                                                               % NON -> Ø
+       {\ifthenelse{\equal{#1}{\Titres}}                                % OUI -> Si le titre precedent est le même que le suivant
+            {}                                                              % NON -> Ø
+            {\ifthenelse{\equal{\TitresPremier}{0}}                         % OUI -> Si c'est le premier Titre de la liste
+                {\eaddto\ListeProduits{#1 : & & & \ \ \cr}                      % NON -> On ajoute le titre à la liste
+                \def\Titres{#1}                                                 %
+                \def\TitresPremier{1}                                           %
+                }                                                               %
+                {\def\spacev{\vspace{-1ex}}                                     % OUI -> On ajoute le titre à la liste avec un espace réduit
+                \eaddto\ListeProduits{\noexpand\spacev\cr#1 : & & & \ \ \cr}    %
+                \def\Titres{#1}                                                 %
+                }                                                               %
+            }                                                               %
+       }                                                                %
+                                                                    %
+    \FPround{\prix}{#4}{2}                                          % Arondir le prix à la deuxième décimal.
+	\FPeval{\montant}{#4 * #3}                                      % Multiplier le prix unitaire par la quantité ou le nombre d'heures.
+	\FPround{\montant}{\montant}{2}                                 % Arondir le montant global à la deuxieme décimal.
+	\FPadd{\TotalHT}{\TotalHT}{\montant}	                        % Ajouter au total de la facture le montant global relevé.
+    \eaddto\ListeProduits{                                          % Afficher le produit, sa quantité, son prix unitaire et son montant global.
+     \ \ \ \noexpand\small{- #2}	& \prix\ \noexpand\euro &	#3	&	\montant\ \noexpand\euro \ \ \cr %
+    }
+} 
+\newcommand{\ListeProduits}{}
+\newcommand{\LigneProduits}{}
+%
+%
+% FONCTION : Ajouter une remise
+% ─────────────────────────────
+\newcommand{\AjouterRemises}[3]{
+	\FPround{\prix}{#3}{2}                                          % Arondir le prix à la deuxième décimal.
+	\FPeval{\montant}{#2 * #3}                                      % Multiplier le prix unitaire par la quantité ou le nombre d'heures.
+	\FPround{\montant}{\montant}{2}                                 % Arondir le montant global à la deuxieme décimal.
+	\FPadd{\TotalHT}{\TotalHT}{-\montant}	                        % Ajouter au total de la facture le montant global relevé.
+    \eaddto\ListeRemises{                                           % Afficher le produit, sa quantité, son prix unitaire et son montant global.
+     \ \ \ #1	&	- \prix\ \noexpand\euro 	&	#2	&	- \montant\ \noexpand\euro \ \ \cr %
+    }
+}
+\newcommand{\ListeRemises}{}
+\newcommand{\LigneRemises}{}
+%
+%
+% FONCTION : Ajouter une reduction
+% ────────────────────────────────
+\newcommand{\AjouterReduction}[2]{
+    %\def\test{\vspace{-1ex}}
+	\FPeval{\ristourne}{#2 * \TotalHT / 100}                        % Evaluer le pourcentage donné à partir du total.
+    \FPround{\ristourne}{\ristourne}{2}                             % Arondir le montant global à la deuxieme décimal.
+    \FPadd{\TotalHT}{\TotalHT}{-\ristourne}	                        % Ajouter au total de la facture la réduction indiquée.
+    \eaddto\ListeReduction{%
+    \noexpand\spacev\cr Remise :\cr \ \ \ \noexpand\small{- #1}	&	-#2\% &	&	- \ristourne \noexpand\euro \ \ \cr%
+    }
+}
+\newcommand{\ListeReduction}{}
+\newcommand{\LigneReduction}{}
+%
