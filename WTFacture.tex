@@ -1,6 +1,7 @@
 \input{.input/facture_header.tex}
 %
 %
+% Après guyzmo (https://github.com/guyzmo/facturation_latex/)  :
 %  _____ _____ _____ _____ _____ _____ _____ _____ _____ _____ 
 % |_____|_____|_____|_____|_____|_____|_____|_____|_____|_____|
 % __        _______ _____          _              _            
@@ -10,17 +11,19 @@
 %    \_/\_/    |_| |_|  \__,_|\___|\__|\__,_|_|  |_|\___|_|    
 %  _____ _____ _____ _____ _____ _____ _____ _____ _____ _____ 
 % |_____|_____|_____|_____|_____|_____|_____|_____|_____|_____|
-%                                                              
+%                                                            
 %                                                            
 %
+% Problèmes :
 %
-%
+% Ne prend pas en compte la page multiple.
+% 
 %
 % OPTIONS DU DOCUMENT :
 % ───────────────────
-\def\Objet                  {facture}               % Type de document : {facture} ou {devis}
+\def\Objet                  {devis}               % Type de document : {facture} ou {devis}
 \def\AfficherTVA            {non}                   % Afficher la TVA
-\def\FactureAcquittee	    {non}		            % Facture acquittée : oui/non
+\def\FactureAcquittee	    {oui}		            % Facture acquittée : oui/non
 \def\FactureLieu	        {Tours}                 % Lieu de l'édition de la facture
 \def\black	        {non}                 % Objet du document
 %
@@ -28,9 +31,9 @@
 % INFORMATION SUR LE DOCUMENT :
 % ───────────────────────────
 \def\FactureObjet	        {Facture}               % Objet du document
-\def\FactureNum	            {051901}	            % Numéro de facture ou de devis
+\def\FactureNum	            {061901}	            % Numéro de facture ou de devis
 \def\FactureDescr           {                       % Description de la facture
-Facture pour le materiel necessaire à la réalisation du prototype et de la version final %
+Réalisation du prototype et de la version final %
 d'une marionette pour la ventriloquie.%
 }
 %
@@ -38,10 +41,10 @@ d'une marionette pour la ventriloquie.%
 % INFORMATIONS SUR LE CLIENT :
 % ──────────────────────────
 \def\ClientNom              {Christian GABRIEL}        % Nom du client ou de l'entreprise
-\def\ClientAdresseRue       {49 Boulevard du rire} % Adresse 
-\def\ClientAdresseVille     {Montreal}                 % Ville
-\def\ClientAdresseCodePostal{A87389}                 % Code postal    
-\def\ClientAdressePays      {Quebec}                % Pays
+\def\ClientAdresseRue       {24 avenue de Grammont} % Adresse 
+\def\ClientAdresseVille     {Tours}                 % Ville
+\def\ClientAdresseCodePostal{37000}                 % Code postal    
+\def\ClientAdressePays      {France}                % Pays
 %   
 %
 % LISTE DES PRODUITS : 
@@ -55,13 +58,71 @@ d'une marionette pour la ventriloquie.%
 %
 %
 %
+\AjouterProduit {Modelisation 3D - CAD} {Sculpting 3D de la marionette} {0} {0}
+\AjouterProduit	{Modelisation 3D - CAD} {Decoupe et préparation des elements (oreille \& nez)} {5} {30}
+\AjouterProduit	{Modelisation 3D - CAD} {Conception et modelisation des moules} {10} {30}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression de la tête} {27} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 4D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 4D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 4D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 4D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 2D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 2D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 2D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 2D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 2D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 2D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 2D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 2D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 2D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 2D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 2D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
 %
-%\AjouterProduit	{Modelisation 3D - CAD} {Sculpting 3D de la marionette} {5} {30}
-%\AjouterProduit	{Modelisation 3D - CAD} {Decoupe et préparation des elements (oreille \& nez)} {6} {30}
-%\AjouterProduit	{Modelisation 3D - CAD} {Conception et modelisation des moules} {8} {30}
-%\AjouterProduit	{Impression 3D (FunLab)} {Impression de la tête} {30} {2}
-%\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
-%\AjouterReduction {Blacked}		{20}
+%10
+\AjouterProduit	{Impression 2D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
+\AjouterProduit	{Impression 3D (FunLab)} {Impression des moules} {30} {2}
 %
 %
 %
@@ -69,19 +130,19 @@ d'une marionette pour la ventriloquie.%
 %
 %
 %
-\AjouterProduit	{Impression 3D (FunLab)} {Impression 3D du prototype} {12} {2}
-\AjouterProduit	{Impression 3D (FunLab)} {Impression 3D de la mecanique} {13} {2}
-\AjouterProduit	{Impression 3D (FunLab)} {Impression 3D de la tête 1|10 } {6} {2}
-\AjouterProduit	{Materiaux} {Paliers lisse Iglidur A200 - certifié FDA - $\oslash$3mm} {10} {1.23}
-\AjouterProduit	{Materiaux} {Paliers lisse Iglidur A200 - certifié FDA - $\oslash$5mm} {10} {1.27}
-\AjouterProduit	{Materiaux} {Vis m3x50mm } {50} {0.19}
-\AjouterProduit	{Materiaux} {Vis à pans creux(lot)} {1} {9.99}
-\AjouterProduit	{Materiaux} {Inserts} {20} {0.45}
-\AjouterProduit	{Materiaux} {Ressorts de compression(lot)} {1} {11.32}
-\AjouterProduit	{Materiaux} {Rond Acier 3x1000mm} {1} {2}
-\AjouterProduit	{Materiaux} {Rond Acier 5x1000mm } {1} {3}
-\AjouterProduit	{Materiaux} {Rond Inox 304L 3x3000mm et 5x3000mm} {1} {30}
-\AjouterProduit	{Materiaux} {Filament 3D colorFab\_XT gris - certifié FDA} {1} {38.5}
+%\AjouterProduit	{Impression 3D (FunLab)} {Impression 3D du prototype} {12} {2}
+%\AjouterProduit	{Impression 3D (FunLab)} {Impression 3D de la mecanique} {13} {2}
+%\AjouterProduit	{Impression 3D (FunLab)} {Impression 3D de la tête 1|10 } {6} {2}
+%\AjouterProduit	{Materiaux} {Paliers lisse Iglidur A200 - certifié FDA - $\oslash$3mm} {10} {2.18}
+%\AjouterProduit	{Materiaux} {Paliers lisse Iglidur A200 - certifié FDA - $\oslash$5mm} {10} {2.18}
+%\AjouterProduit	{Materiaux} {Vis m3x50mm } {50} {0.19}
+%\AjouterProduit	{Materiaux} {Vis à pans creux(lot)} {1} {9.99}
+%\AjouterProduit	{Materiaux} {Inserts} {20} {0.45}
+%\AjouterProduit	{Materiaux} {Ressorts de compression(lot)} {1} {11.32}
+%\AjouterProduit	{Materiaux} {Rond Acier 3x1000mm} {1} {2}
+%\AjouterProduit	{Materiaux} {Rond Acier 5x1000mm } {1} {3}
+%\AjouterProduit	{Materiaux} {Rond Inox 304L 3x3000mm et 5x3000mm} {1} {30}
+%\AjouterProduit	{Materiaux} {Filament 3D colorFab\_XT gris - certifié FDA} {1} {38.5}
 %
 %
 %

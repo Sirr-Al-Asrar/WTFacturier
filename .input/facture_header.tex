@@ -3,7 +3,7 @@
 %   WTFacturier | Header
 %  ──────────────────────
 %   En tête du fichier tex.
-%   Celui contient principalement les extensions et fonctions necessaire à la compilation du document.
+%   Celui-ci contient principalement les extensions et fonctions necessaire à la compilation du document.
 %
 %
 %
@@ -19,11 +19,20 @@
 \usepackage{units}
 \usepackage{graphicx}
 \usepackage{tabu}
+\usepackage{longtable}
+\usepackage{lastpage}
 \usepackage{fancyhdr}
 \usepackage{fp}
 \usepackage{scrextend}
-\usepackage{xcolor}
+\usepackage{needspace}
 %
+
+
+
+
+
+\usepackage{xcolor}
+\usepackage{lipsum}
 %
 % VARIABLES GENERIQUES :
 % ───────────────────
@@ -31,10 +40,13 @@
 \def\TotalHT{0}
 \def\TotalTVA{0}
 \def\noTVA{%
-    \textbf{Total HT} & & & \TotalHT\ \euro \cr {\small TVA non applicable, art 293 B du CGI}
+    \cr\hline\cr\textbf{Total HT} & & & \TotalHT\ \euro \cr {\small TVA non applicable, art 293 B du CGI}
 }
 %
 \makeatletter
+
+\renewcommand{\arraystretch}{0.4} % <-------------- reduit la hauteur minimal des lignes d'un tableau
+
 %
 % FONCTION : addto developpé
 % ───────────────────
@@ -60,34 +72,37 @@
 	\global\let\TotalHT\TotalHT
 	\global\let\TotalTVA\TotalTVA
 	\global\let\TotalTTC\TotalTTC
-	\cr \hline
+    %\cr\cr
     \ifthenelse{\equal{\black}{oui}}
-    {}
-    {\noTVA
+    {\needspace{1cm}\cr\hline\cr\textbf{BLacked} & & & \TotalHT\ \euro}
+    {
+        \noTVA
         \ifthenelse {\equal{\AfficherTVA}{oui}}
         {Total HT			& & &	\TotalHT	\cr
          TVA \TVA~\% 		& & &	\TotalTVA	\cr}
         {}
     }
+    
 }
 %
 % FONCTION : Ajouter un produit à la liste des produits
 % ──────────────────────────────────────────────────────
 \def\Titres{}
 \def\TitresPremier{0}
+\newcommand{\ListeProduits}{}
 \newcommand{\AjouterProduit}[4]{                                % Arguments : Catégorie, Désignation, quantité, prix unitaire HT
                             
-   \ifthenelse{\equal{#1}{}}                                        % Si un titre est fournit
-       {}                                                               % NON -> Ø
-       {\ifthenelse{\equal{#1}{\Titres}}                                % OUI -> Si le titre precedent est le même que le suivant
-            {}                                                              % NON -> Ø
-            {\ifthenelse{\equal{\TitresPremier}{0}}                         % OUI -> Si c'est le premier Titre de la liste
-                {\eaddto\ListeProduits{#1 : & & & \ \ \cr}                      % NON -> On ajoute le titre à la liste
+   \ifthenelse{\equal{#1}{}}                                        % Si aucun titre n'est fournit
+       {}                                                               % OUI -> Pas de titre
+       {\ifthenelse{\equal{#1}{\Titres}}                                % NON -> Si le titre precedent est le même que le suivant
+            {}                                                              % OUI -> Pas de titre
+            {\ifthenelse{\equal{\TitresPremier}{0}}                         % NON -> Si c'est le premier Titre de la liste
+                {\eaddto\ListeProduits{\cr#1 : & & & \ \ \cr}                      % OUI -> On ajoute le titre à la liste
                 \def\Titres{#1}                                                 %
                 \def\TitresPremier{1}                                           %
                 }                                                               %
-                {\def\spacev{\vspace{-1ex}}                                     % OUI -> On ajoute le titre à la liste avec un espace réduit
-                \eaddto\ListeProduits{\noexpand\spacev\cr#1 : & & & \ \ \cr}    %
+                {                                   % NON -> On ajoute le titre à la liste en reduisant l'espace qui le precede.
+                \eaddto\ListeProduits{\cr\cr#1 : & & & \ \ \cr}    %
                 \def\Titres{#1}                                                 %
                 }                                                               %
             }                                                               %
@@ -97,16 +112,27 @@
 	\FPeval{\montant}{#4 * #3}                                      % Multiplier le prix unitaire par la quantité ou le nombre d'heures.
 	\FPround{\montant}{\montant}{2}                                 % Arondir le montant global à la deuxieme décimal.
 	\FPadd{\TotalHT}{\TotalHT}{\montant}	                        % Ajouter au total de la facture le montant global relevé.
-    \eaddto\ListeProduits{                                          % Afficher le produit, sa quantité, son prix unitaire et son montant global.
-     \ \ \ \noexpand\small{- #2}	& \prix\ \noexpand\euro &	#3	&	\montant\ \noexpand\euro \ \ \cr %
-    }
-} 
-\newcommand{\ListeProduits}{}
-\newcommand{\LigneProduits}{}
+    
+   \ifthenelse{\equal{#3}{0}}                                        % Si aucun titre n'est fournit
+       {
+		   \eaddto\ListeProduits{                                          % Afficher le produit, sa quantité, son prix unitaire et son montant global.
+			  \cr \ \ \ \noexpand\small{- #2} & & & \cr %
+    		}
+		}
+                                                               % OUI -> Pas de titre
+	   {
+			\eaddto\ListeProduits{                                          % Afficher le produit, sa quantité, son prix unitaire et son montant global.
+				\cr \ \ \ \noexpand\small{- #2}	& \prix\ \noexpand\euro &	#3	&	\montant\ \noexpand\euro \ \ \cr %
+    		}
+
+		}
+
+	} 
 %
 %
-% FONCTION : Ajouter une remise
-% ─────────────────────────────
+% FONCTION : Ajouter une remise à liste des produits
+% ───────────────────────────────────────────────────
+\newcommand{\ListeRemises}{}
 \newcommand{\AjouterRemises}[3]{
 	\FPround{\prix}{#3}{2}                                          % Arondir le prix à la deuxième décimal.
 	\FPeval{\montant}{#2 * #3}                                      % Multiplier le prix unitaire par la quantité ou le nombre d'heures.
@@ -116,21 +142,17 @@
      \ \ \ #1	&	- \prix\ \noexpand\euro 	&	#2	&	- \montant\ \noexpand\euro \ \ \cr %
     }
 }
-\newcommand{\ListeRemises}{}
-\newcommand{\LigneRemises}{}
 %
 %
-% FONCTION : Ajouter une reduction
-% ────────────────────────────────
+% FONCTION : Ajouter une reduction à liste des produits
+% ──────────────────────────────────────────────────────
+\newcommand{\ListeReduction}{}
 \newcommand{\AjouterReduction}[2]{
-    %\def\test{\vspace{-1ex}}
 	\FPeval{\ristourne}{#2 * \TotalHT / 100}                        % Evaluer le pourcentage donné à partir du total.
     \FPround{\ristourne}{\ristourne}{2}                             % Arondir le montant global à la deuxieme décimal.
     \FPadd{\TotalHT}{\TotalHT}{-\ristourne}	                        % Ajouter au total de la facture la réduction indiquée.
     \eaddto\ListeReduction{%
-    \noexpand\spacev\cr Remise :\cr \ \ \ \noexpand\small{- #1}	&	-#2\% &	&	- \ristourne \noexpand\euro \ \ \cr%
+    \cr\cr Réduction :\cr\cr \ \ \ \noexpand\small{- #1}	&	-#2\% &	&	- \ristourne \noexpand\euro \ \ \cr%
     }
 }
-\newcommand{\ListeReduction}{}
-\newcommand{\LigneReduction}{}
 %

@@ -4,25 +4,36 @@
 %   WTFacturier | Footer
 %  ──────────────────────
 %   Pied de page du fichier tex.
-%   Celui contient principalement la mise en page general du document
+%   Celui-ci contient principalement la mise en page general du document
 %
-\geometry{verbose,tmargin=4em,bmargin=6em,lmargin=6em,rmargin=6em}          % Marges du document
+\geometry{verbose,tmargin=4em,bmargin=7em,lmargin=6em,rmargin=6em}          % Marges du document
 %
 \setlength{\parindent}{0pt}                                                 % Supprimer l'indentation
 %
 \def\changeLmargin#1{\list{}{\leftmargin#1}\item[]}                         % Changer ponctuellement la taille de la marge gauche
 \let\endchangeLmargin=\endlist 
 %
+%
 \renewcommand{\headrulewidth}{0pt}                                          % Suprimer la ligne d'en-tête
 %
-\thispagestyle{fancy}                                                       % suprime les en-tete et pied de page du document
+\thispagestyle{fancy}                                                       % suprime les en-tete et pied de page du document (numeros de page nottament)
 \pagestyle{fancy}
 %
-\cfoot{                                                                     % Contenu du pied de page
-	\small{Clément GASQUE - SIRET : 840275432010 \\
-    Telephone : +33(0)7 67 95 95 73 ~--~ E-mail : clement.gasque@delineation.com\\}
-    %
-    \tiny{Dispensé d'immatriculation au registre du commerce et des sociétés et au répertoire des métiers}
+
+
+
+\cfoot{
+    \ifthenelse{\equal{\pageref{LastPage}}{\thepage}}
+        {
+            \begin{minipage}[b]{175mm}\vspace{10mm}\raggedleft\small\thepage/\pageref{LastPage}\end{minipage}
+            \vspace{-15mm}
+            {\center
+            \small{Clément GASQUE - SIRET : 840275432010 \\
+            Telephone : +33(0)7 67 95 95 73 ~--~ E-mail : clement.gasque@icloud.com\\}
+            \tiny{Dispensé d'immatriculation au registre du commerce et des sociétés et au répertoire des métiers\\}   
+            }
+        } %                                                             % Contenu du pied de page
+        {\begin{minipage}[b]{175mm}\vspace{10mm}\raggedleft\small\thepage/\pageref{LastPage}\end{minipage}} 
 }
 %
 \begin{document}
@@ -36,6 +47,7 @@
     %
     \begin{minipage}[t]{14cm}
         \flushright
+        %
         \ifthenelse{\equal{\Objet}{devis}}                                  % Numero de facture/devis
             {Devis nº\FactureNum}
             {Facture nº\FactureNum}
@@ -67,31 +79,33 @@
     \vspace{1ex}
     \\
     \textnormal\FactureDescr                                                % Description de la facture
-%
+    \vspace{1ex}
+    %
     \begin{center}                                                          % Liste des elements du devis ou de la facture
-        \begin{tabular}{lrcr}
+        \begin{longtabu}to 1\textwidth {X[l] r c r}
             \textbf{Désignation ~~~~~~}	& \textbf{Prix unitaire} & \textbf{Qté./Heures}	& \textbf{Montant}	\\
+            \cr
             \hline
             \AfficheResultat{}
-        \end{tabular}
+        \end{longtabu}
     \end{center}
-%
+
+\begin{samepage}
 \ifthenelse{\equal{\Objet}{devis}}                                          % Devis ou facture
-    {
-    \noindent
-        \begin{changeLmargin}{10cm}                                         % Bon pour accord si devis
-            \vspace{1ex}
-            Bon pour accord le\ \ \ \ \ \ / \ \ \ \ / \ \ \ \ \\
-            Signature :\\
-        \end{changeLmargin}
+    {\noindent
+    \begin{changeLmargin}{10cm}                                         % Bon pour accord si devis
+            \vspace{1ex}%
+            Bon pour accord le\ \ \ \ \ \ / \ \ \ \ / \ \ \ \ \\%
+            Signature :\\%
+        \end{changeLmargin}%
         }
     {\ifthenelse{\equal{\FactureAcquittee}{oui}}                            % Aquittement de la facturatio 
-        {\vfill
-            \center \fbox{\ Facture acquittée\ }
+        {\vfill%
+            \center \fbox{\ Facture acquittée\ }%
         \vfill}
-        {\vfill
+        {\vfill%
         \center À régler par chèque ou par virement bancaire :
-
+%
             \begin{center}
                 \begin{tabular}{|c c c c|}
                     \hline 	\textbf{Code banque}	& \textbf{Code guichet}	& \textbf{Nº de Compte}		& \textbf{Clé RIB}	\\
@@ -102,6 +116,8 @@
                 \end{tabular}
             \end{center}
             \vfill
-        }}
+        }
+    }
+\end{samepage}
 %
 \end{document}

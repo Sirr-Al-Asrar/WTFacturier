@@ -1,2 +1,0 @@
-# WTFacturier
-Facturier Latex
